@@ -7,18 +7,21 @@
     <link rel="stylesheet" href="./assets/css/stylesheet.css">
 </head>
 <body>
+    <h1>Weather Dashboard</h1>
     <div class="container">
-        <h1>Weather Dashboard</h1>
-        <form id="search-bar">
-            <input type="text" id="city-input" placeholder="Denver, Tucson, New York..." required>
-            <button type="submit">Search</button>
-        </form>
+        <div class="search-container">
+            <label for="city-input">Search for a City:</label>
+            <form id="search-bar">
+                <input type="text" id="city-input" placeholder="New York, Denver, LA..." required>
+                <button type="submit" class="active">Search</button>
+            </form>
+            <div id="history" class="history-container"></div>
+        </div>
         
-        <!-- EACH DIV BELOW WILL GET DATA APPENDED TO ITSELF USING OUR JS FILE -->
-
-        <div id="current-weather"></div>
-        <div id="forecast" class="forecast-container"></div>
-        <div id="history"></div>
+        <div class="weather-display">
+            <div id="current-weather" class="current-weather"></div>
+            <div id="forecast" class="forecast-container"></div>
+        </div>
     </div>
     <script src="./assets/js/javascript.js"></script>
 </body>
