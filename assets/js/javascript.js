@@ -8,10 +8,10 @@ searchForm.addEventListener('submit', (event) => {
     getCoordinates(city);
 });
 
-// FUNCTION TO GET CITY COORDINATES TO DISPLAY WEATHER ACCURATELY :D
+// FUNCTION TO GET CITY COORDINATES TO DISPLAY WEATHER ACCURATELY
 
 function getCoordinates(city) {
-    const geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
+    const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
     fetch(geoUrl)
         .then(response => response.json())
         .then(data => {
@@ -77,26 +77,24 @@ document.addEventListener('DOMContentLoaded', displaySearchHistory);
 function displayWeather(data, city) {
     const currentWeatherDiv = document.getElementById('current-weather');
     currentWeatherDiv.innerHTML = `
-        <h2>Current Weather in ${city}</h2>
-        <p>Date: ${new Date(data.list[0].dt * 1000).toLocaleDateString()}</p>
-        <p>Temperature: ${data.list[0].main.temp}°F</p>
-        <p>Humidity: ${data.list[0].main.humidity}%</p>
-        <p>Wind Speed: ${data.list[0].wind.speed} mph</p>
-        <img src="http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png" alt="${data.list[0].weather[0].description}">
+        <h2>${city} (${new Date(data.list[0].dt * 1000).toLocaleDateString()}) <img src="http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png" alt="${data.list[0].weather[0].description}"></h2>
+        <p>Temp: ${data.list[0].main.temp}°F</p>
+        <p>Wind: ${data.list[0].wind.speed} MPH</p>
+        <p>Humidity: ${data.list[0].main.humidity} %</p>
     `;
 
     // HANDLES CREATING A 5 DAY FORECAST
     
     const forecastDiv = document.getElementById('forecast');
-    forecastDiv.innerHTML = `<h2>5-Day Forecast</h2>`;
+    forecastDiv.innerHTML = `<h2>5-Day Forecast:</h2>`;
     for (let i = 0; i < data.list.length; i += 8) {
         forecastDiv.innerHTML += `
             <div>
                 <h3>${new Date(data.list[i].dt * 1000).toLocaleDateString()}</h3>
-                <p>Temperature: ${data.list[i].main.temp}°F</p>
-                <p>Humidity: ${data.list[i].main.humidity}%</p>
-                <p>Wind Speed: ${data.list[i].wind.speed} mph</p>
                 <img src="http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}.png" alt="${data.list[i].weather[0].description}">
+                <p>Temp: ${data.list[i].main.temp}°F</p>
+                <p>Wind: ${data.list[i].wind.speed} MPH</p>
+                <p>Humidity: ${data.list[i].main.humidity} %</p>
             </div>
         `;
     }
