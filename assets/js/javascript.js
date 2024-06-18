@@ -13,16 +13,23 @@ searchForm.addEventListener('submit', (event) => {
 function getCoordinates(city) {
     const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
     fetch(geoUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                const { lat, lon } = data[0];
-                getWeather(lat, lon, city);
-            } else {
-                alert(`City not found: ${city}`);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
             }
+            return response.json();
         })
-        .catch(error => console.error(`Error fetching coordinates:`, error));
+        .then(data => {
+            if (data.length === 0) {
+                throw new Error('City not found');
+            }
+            const { lat, lon } = data[0];
+            getWeather(lat, lon, city);
+        })
+        .catch(error => {
+            console.error(`Error fetching coordinates:`, error);
+            alert(`There was an error fetching the coordinates: ${error.message}`);
+        });
 }
 
 // FUNCTION THAT FETCHES WEATHER FROM OUR API
@@ -30,7 +37,12 @@ function getCoordinates(city) {
 function getWeather(lat, lon, city) {
     const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
     fetch(weatherUrl)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(data => {
             displayWeather(data, city);
             saveSearchHistory(city);
@@ -77,7 +89,7 @@ document.addEventListener('DOMContentLoaded', displaySearchHistory);
 function displayWeather(data, city) {
     const currentWeatherDiv = document.getElementById('current-weather');
     currentWeatherDiv.innerHTML = `
-        <h2>${city} (${new Date(data.list[0].dt * 1000).toLocaleDateString()}) <img src="http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png" alt="${data.list[0].weather[0].description}"></h2>
+        <h2>${city} (${new Date(data.list[0].dt * 1000).toLocaleDateString()}) <img src="https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png" alt="${data.list[0].weather[0].description}"></h2>
         <p>Temp: ${data.list[0].main.temp}°F</p>
         <p>Wind: ${data.list[0].wind.speed} MPH</p>
         <p>Humidity: ${data.list[0].main.humidity} %</p>
@@ -91,7 +103,7 @@ function displayWeather(data, city) {
         forecastDiv.innerHTML += `
             <div>
                 <h3>${new Date(data.list[i].dt * 1000).toLocaleDateString()}</h3>
-                <img src="http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}.png" alt="${data.list[i].weather[0].description}">
+                <img src="https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}.png" alt="${data.list[i].weather[0].description}">
                 <p>Temp: ${data.list[i].main.temp}°F</p>
                 <p>Wind: ${data.list[i].wind.speed} MPH</p>
                 <p>Humidity: ${data.list[i].main.humidity} %</p>
