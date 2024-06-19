@@ -1,4 +1,4 @@
-# weatherboard
+# Weatherboard
 
 ##Usage
 
