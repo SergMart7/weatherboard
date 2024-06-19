@@ -14,3 +14,13 @@ Here it is in use:
 ![after one input](./images/ss2.png)
 
 ![after two inputs](./images/ss3.png)
+
+## Links
+
+Website:
+
+https://sergmart7.github.io/weatherboard/
+
+Want to check out the repo? Here you go:
+
+https://github.com/SergMart7/weatherboard
